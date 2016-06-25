@@ -1,4 +1,5 @@
 SET SQL_SAFE_UPDATES = 0; 
+SET autocommit=0;
 
 delete from vertex;
 insert into vertex select distinct vertex_id from halt_vertex;
@@ -25,10 +26,10 @@ delete from vertex_ss where active =0;
 
 drop table if exists wait_time;
 
-create table wait_time ( ss int, vid int, wait_time float);
+create table wait_time ( ss int, vid int,mid int, wait_time float);
 
 insert into wait_time
-select v.ss, v.vid, greatest((m.finish_ts)-v.finish_ts,0) waittime from vertex_ss v, vertex_ss m , graph g
+select v.ss, v.vid,m.vid, greatest((m.finish_ts)-v.finish_ts,0) waittime from vertex_ss v, vertex_ss m , graph g
 where  m.ss=v.ss and g.start=m.vid and g.end=v.vid;
 
 
@@ -40,5 +41,5 @@ where  m.ss=v.ss and g.start=m.vid and g.end=v.vid;
 -- group by ss;
 
 
-
+SET autocommit=1;
 SET SQL_SAFE_UPDATES = 1; 
